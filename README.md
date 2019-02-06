@@ -5,7 +5,7 @@
 
 ## Run the following command in the root directory of your Node-RED install
 
-    npm install node-red-node-google
+    npm install node-red-contrib-micropub
 
 ## Usage
 
@@ -13,7 +13,7 @@
 
 Create a new entry on a weblog.
 
-The incoming message should provide the follwoing properties.
+The incoming message should provide the following properties.
 
-* **payload** - an MF2 formatted object
+* **payload** - a string, or a MF2 formatted object
 
