@@ -1,0 +1,48 @@
+<script type="text/javascript">
+    RED.nodes.registerType('indieauth', {
+        category: 'config',
+        defaults: {
+            client_id: {value: ""},
+            me: {value: ""}
+        },
+        credentials: {
+            micropub_endpoint: {value: "", required: false},
+            token_endpoint: {value: "", required: false},
+            auth_token: {value: "", required: false}
+        },
+        label: function () {
+            return this.me || 'indieauth';
+        },
+
+        exportable: false,
+
+        oneditprepare: function () {
+            var id = this.id;
+
+            $('#node-config-start-auth').mousedown(function () {
+                var callback = 'https://localhost:1881/indieauth/auth/callback';
+                var clientId = $("#node-config-input-client_id").val();
+                var me = $("#node-config-input-me").val();
+                var url = 'indieauth/auth?id=' + id + '&client_id=' + clientId + "&me=" + me + "&callback=" + encodeURIComponent(callback);
+                $(this).attr("href", url);
+            });
+        }
+    })
+</script>
+
+<script type="text/x-red" data-template-name="indieauth">
+    <div class="form-row">
+        <label for="node-config-input-client_id"><i class="icon-bookmark"></i> Client ID</label>
+        <input type="text" id="node-config-input-client_id">
+    </div>
+
+    <div class="form-row">
+        <label for="node-config-input-me"><i class="icon-bookmark"></i> me</label>
+        <input type="text" id="node-config-input-me">
+    </div>
+
+    <div class="form-row">
+         <label>&nbsp;</label>
+         <a class="btn" id="node-config-start-auth" href="#" target="_blank"><span>Web Sign In</span></a>
+    </div>
+</script>

@@ -1,0 +1,13 @@
+{
+    "name" : "node-red-contrib-micropub",
+    "version": "0.1.0",
+    "dependencies": {
+        "micropub-helper": "1.5.3"
+    },
+    "node-red" : {
+        "nodes": {
+            "indieauth": "indieauth.js",
+            "micropub-create": "micropub-create.js"
+        }
+    }
+}
