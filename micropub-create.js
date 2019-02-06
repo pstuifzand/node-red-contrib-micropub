@@ -6,7 +6,7 @@ module.exports = function (RED) {
 
         this.endpoint = RED.nodes.getNode(config.endpoint);
 
-        var node = this;
+        const node = this;
 
         node.on('input', function (msg) {
             try {
@@ -14,8 +14,22 @@ module.exports = function (RED) {
                     micropubEndpoint: node.endpoint.credentials.micropub_endpoint,
                     token: node.endpoint.credentials.auth_token
                 });
-                var location = micropub.postMicropub(msg.payload);
-                msg.location = location;
+
+                let entry = {};
+
+                if (typeof msg.payload === 'string') {
+                    entry.type = ['h-entry'];
+                    entry.properties = {
+                        content: [{
+                            value: msg.payload
+                        }]
+                    };
+                } else if (msg.payload.hasOwnProperty('type') && msg.payload.hasOwnProperty('properties')) {
+                    entry = msg.payload;
+                }
+
+                msg.payload = entry;
+                msg.location = micropub.postMicropub(entry);
                 node.send(msg);
             } catch (e) {
                 node.error(e);
@@ -24,5 +38,5 @@ module.exports = function (RED) {
     }
 
     RED.nodes.registerType("micropub-create", MicropubNode);
-}
+};
 

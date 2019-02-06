@@ -34,8 +34,7 @@
     <p>Posts to Micropub endpoints</p>
     <p>Connect to your Micropub powered blog and post messages.</p>
     <p>Input Parameters:</p>
-    <p><code>msg.type</code> - Default: 'json'
-    <p><code>msg.payload</code> - Should be an Micropub object using MF2.</p>
+    <p><code>msg.payload</code> - Should be an Micropub object using MF2, it will be sent without modification to the endpoint. If the payload is a string, it will be sent as a content value.</p>
     <p><code>msg.payload.type</code> - Should be an array with the type.</p>
     <p><code>msg.payload.properties</code> - Should be on object with MF2 properties.</p>
     <p><code>msg.payload.properties.name</code> - Should be an array with a string.</p>
