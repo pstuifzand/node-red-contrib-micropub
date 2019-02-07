@@ -35,7 +35,7 @@ module.exports = function (RED) {
             RED.nodes.addCredentials(node_id, credentials);
         }).catch(err => {
             RED.log.error(err);
-            res.send(err);
+            res.send("error while getting authurl");
         });
     });
 

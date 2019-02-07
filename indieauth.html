@@ -19,8 +19,17 @@
         oneditprepare: function () {
             var id = this.id;
 
+            var pathname = document.location.pathname;
+            if (pathname.slice(-1) != "/") {
+                pathname += "/";
+            }
+            
+            var callback = location.protocol + "//" +
+                           location.hostname +
+                           (location.port?":"+location.port:"")+
+                           pathname + "indieauth/auth/callback";
+
             $('#node-config-start-auth').mousedown(function () {
-                var callback = 'https://localhost:1881/indieauth/auth/callback';
                 var clientId = $("#node-config-input-client_id").val();
                 var me = $("#node-config-input-me").val();
                 var url = 'indieauth/auth?id=' + id + '&client_id=' + clientId + "&me=" + me + "&callback=" + encodeURIComponent(callback);
@@ -31,6 +40,11 @@
 </script>
 
 <script type="text/x-red" data-template-name="indieauth">
+    <div class="form-tips" id="node-config-indieauth-tooltip">
+    Fill in your Client ID, Me url and click Web Sign In. You will be redirect to your authorization endpoint. When authorization is complete you can close the new tab and
+    click Done.
+    </div>
+
     <div class="form-row">
         <label for="node-config-input-client_id"><i class="icon-bookmark"></i> Client ID</label>
         <input type="text" id="node-config-input-client_id">
