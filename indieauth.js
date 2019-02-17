@@ -15,12 +15,14 @@ module.exports = function (RED) {
 
     RED.httpAdmin.get('/indieauth/auth', function (req, res) {
         var node_id = req.query.id;
+        var redirect_uri = req.query.callback;
+        var state = node_id + ':1234';
 
         const micropub = new Micropub({
             clientId: req.query.client_id,
-            redirectUri: 'http://localhost:1881/indieauth/auth/callback',
+            redirectUri: redirect_uri,
             me: req.query.me,
-            state: node_id + ':1234'
+            state: state
         });
 
         var credentials = {
@@ -31,6 +33,8 @@ module.exports = function (RED) {
         micropub.getAuthUrl(req.query.me).then(url => {
             credentials.micropub_endpoint = micropub.options.micropubEndpoint;
             credentials.token_endpoint = micropub.options.tokenEndpoint;
+            credentials.redirect_uri = redirect_uri;
+            credentials.state = state;
             res.redirect(url);
             RED.nodes.addCredentials(node_id, credentials);
         }).catch(err => {
@@ -40,9 +44,6 @@ module.exports = function (RED) {
     });
 
     RED.httpAdmin.get('/indieauth/auth/callback', function (req, res) {
-        RED.log.info(req.query.state);
-        RED.log.info(req.query.code);
-
         var code = req.query.code;
         var state = req.query.state.split(':');
 
@@ -59,7 +60,7 @@ module.exports = function (RED) {
 
         const micropub = new Micropub({
             clientId: credentials.client_id,
-            redirectUri: 'http://localhost:1881/indieauth/auth/callback',
+            redirectUri: credentials.redirect_uri,
             tokenEndpoint: credentials.token_endpoint,
             state: req.query.state,
             me: credentials.me,
