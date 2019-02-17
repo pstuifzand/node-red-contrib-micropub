@@ -1,4 +1,5 @@
 var Micropub = require('micropub-helper');
+var crypto = require('crypto');
 
 module.exports = function (RED) {
     function IndieauthNode(n) {
@@ -16,7 +17,9 @@ module.exports = function (RED) {
     RED.httpAdmin.get('/indieauth/auth', function (req, res) {
         var node_id = req.query.id;
         var redirect_uri = req.query.callback;
-        var state = node_id + ':1234';
+
+        var random_part = crypto.randomBytes(20).toString('hex');
+        var state = node_id + ':' + random_part;
 
         const micropub = new Micropub({
             clientId: req.query.client_id,
